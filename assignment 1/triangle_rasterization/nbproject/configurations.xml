@@ -31,7 +31,7 @@
           <buildCommandWorkingDir>.</buildCommandWorkingDir>
           <buildCommand>${MAKE} -f Makefile</buildCommand>
           <cleanCommand>${MAKE} -f Makefile clean</cleanCommand>
-          <executablePath></executablePath>
+          <executablePath>trirast</executablePath>
         </makeTool>
       </makefileType>
       <item path="main.c" ex="false" tool="0" flavor2="3">

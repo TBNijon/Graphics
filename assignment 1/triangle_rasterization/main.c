@@ -19,28 +19,27 @@
 // Number of drawable pixels, i.e. x coordinates passed to PutPixel()
 // should be in the range [0, framebuffer_width[.  Analogous for y.
 // (These values must both be a power of 2)
-const int   framebuffer_width = 128;
-const int   framebuffer_height = 64;
+const int framebuffer_width = 128;
+const int framebuffer_height = 64;
 
-const int   zoomed_pixel_size = 7;
+const int zoomed_pixel_size = 7;
 
-int     screen_width, screen_height;
-int     draw_optimized = 0;
-int     zoom = 1;
-int     scene = 1;
-int     draw_corners = 0;
-int     color_by_putpixel_count = 0;
+int screen_width, screen_height;
+int draw_optimized = 0;
+int zoom = 1;
+int scene = 1;
+int draw_corners = 0;
+int color_by_putpixel_count = 0;
 
-byte    *framebuffer;
+byte *framebuffer;
 
 void
-InitOpenGL(void)
-{
+InitOpenGL(void) {
     // Set the background color
     glClearColor(0., 0., 0., 0.);
 
     // Allocate a framebuffer, to be filled during triangle rasterization
-    framebuffer = (byte*)malloc(framebuffer_width*framebuffer_height*3);
+    framebuffer = (byte*) malloc(framebuffer_width * framebuffer_height * 3);
 
     // Setup texturing state (as we display the rasterization framebuffer
     // using a textured quad)
@@ -53,10 +52,8 @@ InitOpenGL(void)
     glDisable(GL_CULL_FACE);
 }
 
-void PutPixel(int x, int y, byte r, byte g, byte b)
-{
-    if (x < 0 || y < 0 || x >= framebuffer_width || y >= framebuffer_height)
-    {
+void PutPixel(int x, int y, byte r, byte g, byte b) {
+    if (x < 0 || y < 0 || x >= framebuffer_width || y >= framebuffer_height) {
         printf("PutPixel(): x, y coordinates (%d, %d) outside of visible area!\n",
                 x, y);
         return;
@@ -65,41 +62,45 @@ void PutPixel(int x, int y, byte r, byte g, byte b)
     // The pixels in framebuffer[] are layed out sequentially,
     // with the R, G and B values one after the other, e.g
     // RGBRGBRGB...
-    framebuffer[3*(framebuffer_width*y+x)] = r;
-    framebuffer[3*(framebuffer_width*y+x)+1] = g;
-    framebuffer[3*(framebuffer_width*y+x)+2] = b;
+
+    if (color_by_putpixel_count == 0) {
+        framebuffer[3 * (framebuffer_width * y + x)] = r;
+        framebuffer[3 * (framebuffer_width * y + x) + 1] = g;
+        framebuffer[3 * (framebuffer_width * y + x) + 2] = b;
+
+    } else if (color_by_putpixel_count == 1) {
+        if (framebuffer[3 * (framebuffer_width * y + x)] == 0) {
+            framebuffer[3 * (framebuffer_width * y + x)] = 128;
+        } else if (framebuffer[3 * (framebuffer_width * y + x)] == 128) {
+            framebuffer[3 * (framebuffer_width * y + x)] = 255;
+        }
+    }
 }
 
 void
-DrawTriangles(void)
-{
-    struct  triangle tri;
-    for (unsigned int t = 0; t < sizeof(triangles)/sizeof(struct triangle); t++)
-    {
+DrawTriangles(void) {
+    struct triangle tri;
+    for (unsigned int t = 0; t < sizeof (triangles) / sizeof (struct triangle); t++) {
         tri = triangles[t];
 
-        if (draw_optimized)
-        {
+        if (draw_optimized) {
             /* draw the triangle with the given color */
             draw_triangle_optimized(
-                vertices[tri.i].x, vertices[tri.i].y,
-                vertices[tri.j].x, vertices[tri.j].y,
-                vertices[tri.k].x, vertices[tri.k].y,
-                colors[tri.c].r, colors[tri.c].g, colors[tri.c].b);
+                    vertices[tri.i].x, vertices[tri.i].y,
+                    vertices[tri.j].x, vertices[tri.j].y,
+                    vertices[tri.k].x, vertices[tri.k].y,
+                    colors[tri.c].r, colors[tri.c].g, colors[tri.c].b);
 
-        }
-        else
-        {
+        } else {
             /* draw the triangle with the given color */
             draw_triangle(
-                vertices[tri.i].x, vertices[tri.i].y,
-                vertices[tri.j].x, vertices[tri.j].y,
-                vertices[tri.k].x, vertices[tri.k].y,
-                colors[tri.c].r, colors[tri.c].g, colors[tri.c].b);
+                    vertices[tri.i].x, vertices[tri.i].y,
+                    vertices[tri.j].x, vertices[tri.j].y,
+                    vertices[tri.k].x, vertices[tri.k].y,
+                    colors[tri.c].r, colors[tri.c].g, colors[tri.c].b);
         }
 
-        if (draw_corners)
-        {
+        if (draw_corners) {
             PutPixel(vertices[tri.i].x, vertices[tri.i].y, 255, 255, 255);
             PutPixel(vertices[tri.j].x, vertices[tri.j].y, 255, 255, 255);
             PutPixel(vertices[tri.k].x, vertices[tri.k].y, 255, 255, 255);
@@ -108,15 +109,13 @@ DrawTriangles(void)
 }
 
 void
-DrawTrianglesOpenGL(void)
-{
-    struct  triangle tri;
+DrawTrianglesOpenGL(void) {
+    struct triangle tri;
 
     glDisable(GL_TEXTURE_2D);
 
     glBegin(GL_TRIANGLES);
-    for (unsigned int t = 0; t < sizeof(triangles)/sizeof(struct triangle); t++)
-    {
+    for (unsigned int t = 0; t < sizeof (triangles) / sizeof (struct triangle); t++) {
         tri = triangles[t];
 
         /* draw the triangle with the given color */
@@ -127,12 +126,10 @@ DrawTrianglesOpenGL(void)
     }
     glEnd();
 
-    if (draw_corners)
-    {
+    if (draw_corners) {
         glColor3ub(255, 255, 255);
         glBegin(GL_POINTS);
-        for (unsigned int t = 0; t < sizeof(triangles)/sizeof(struct triangle); t++)
-        {
+        for (unsigned int t = 0; t < sizeof (triangles) / sizeof (struct triangle); t++) {
             tri = triangles[t];
             glVertex2f(vertices[tri.i].x, vertices[tri.i].y);
             glVertex2f(vertices[tri.j].x, vertices[tri.j].y);
@@ -143,37 +140,31 @@ DrawTrianglesOpenGL(void)
 }
 
 void
-TestRasterizationSpeed(void)
-{
+TestRasterizationSpeed(void) {
     const int N = 1000;
 
-    struct timeval  t0, t1;
-    double          diff;
+    struct timeval t0, t1;
+    double diff;
 
     //srand(123456);
 
     gettimeofday(&t0, NULL);
 
-    if (draw_optimized)
-    {
-        for (int t = 0; t < N; t++)
-        {
+    if (draw_optimized) {
+        for (int t = 0; t < N; t++) {
             draw_triangle_optimized(
-                rand()%framebuffer_width, rand()%framebuffer_height,
-                rand()%framebuffer_width, rand()%framebuffer_height,
-                rand()%framebuffer_width, rand()%framebuffer_height,
-                colors[t%6].r, colors[t%6].g, colors[t%6].b);
+                    rand() % framebuffer_width, rand() % framebuffer_height,
+                    rand() % framebuffer_width, rand() % framebuffer_height,
+                    rand() % framebuffer_width, rand() % framebuffer_height,
+                    colors[t % 6].r, colors[t % 6].g, colors[t % 6].b);
         }
-    }
-    else
-    {
-        for (int t = 0; t < N; t++)
-        {
+    } else {
+        for (int t = 0; t < N; t++) {
             draw_triangle(
-                rand()%framebuffer_width, rand()%framebuffer_height,
-                rand()%framebuffer_width, rand()%framebuffer_height,
-                rand()%framebuffer_width, rand()%framebuffer_height,
-                colors[t%6].r, colors[t%6].g, colors[t%6].b);
+                    rand() % framebuffer_width, rand() % framebuffer_height,
+                    rand() % framebuffer_width, rand() % framebuffer_height,
+                    rand() % framebuffer_width, rand() % framebuffer_height,
+                    colors[t % 6].r, colors[t % 6].g, colors[t % 6].b);
         }
     }
 
@@ -182,42 +173,39 @@ TestRasterizationSpeed(void)
     /* calculate time used */
     diff = t1.tv_sec - t0.tv_sec + (t1.tv_usec - t0.tv_usec)*1.0e-6;
 
-    printf("%d triangles in %.6f seconds, %.1f triangles/sec\n", N, diff, N/diff);
+    printf("%d triangles in %.6f seconds, %.1f triangles/sec\n", N, diff, N / diff);
 }
 
 void
-DrawPixels(void)
-{
+DrawPixels(void) {
     const int N = 1000000;
 
-    struct timeval  t0, t1;
+    struct timeval t0, t1;
 
     gettimeofday(&t0, NULL);
 
     srand(123456);
-    for (int i = 0; i < N; i++)
-    {
-        PutPixel(rand()%framebuffer_width, rand()%framebuffer_height,
-            rand()%255, rand()%255, rand()%255);
+    for (int i = 0; i < N; i++) {
+        PutPixel(rand() % framebuffer_width, rand() % framebuffer_height,
+                rand() % 255, rand() % 255, rand() % 255);
     }
 
     gettimeofday(&t1, NULL);
 
     /* calculate time used */
-    double diff = (t1.tv_sec + t1.tv_usec/1000000.0) - (t0.tv_sec + t0.tv_usec/1000000.0);
+    double diff = (t1.tv_sec + t1.tv_usec / 1000000.0) - (t0.tv_sec + t0.tv_usec / 1000000.0);
 
-    printf("%d pixels in %.6f seconds, %.1f pixels/sec\n", N, diff, N/diff);
+    printf("%d pixels in %.6f seconds, %.1f pixels/sec\n", N, diff, N / diff);
 }
 
 void
-DrawScene(void)
-{
+DrawScene(void) {
 
     /* clear the draw buffer */
     glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 
     // clear the rasterization framebuffer
-    memset(framebuffer, 0, 3*framebuffer_width*framebuffer_height);
+    memset(framebuffer, 0, 3 * framebuffer_width * framebuffer_height);
 
     if (scene == 1)
         DrawTriangles();
@@ -229,8 +217,7 @@ DrawScene(void)
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
-    if (scene != 9)
-    {
+    if (scene != 9) {
         if (zoom)
             glOrtho(0, framebuffer_width, 0, framebuffer_height, -1, 1);
         else
@@ -240,35 +227,33 @@ DrawScene(void)
 
         glEnable(GL_TEXTURE_2D);
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB8,
-            framebuffer_width, framebuffer_height,
-            0, GL_RGB, GL_UNSIGNED_BYTE, framebuffer);
+                framebuffer_width, framebuffer_height,
+                0, GL_RGB, GL_UNSIGNED_BYTE, framebuffer);
 
         glColor3f(1, 1, 1);
         glBegin(GL_QUADS);
-            glTexCoord2i(0, 0);
-            glVertex2i(0, 0);
-            glTexCoord2i(1, 0);
-            glVertex2i(framebuffer_width, 0);
-            glTexCoord2i(1, 1);
-            glVertex2i(framebuffer_width, framebuffer_height);
-            glTexCoord2i(0, 1);
-            glVertex2i(0, framebuffer_height);
+        glTexCoord2i(0, 0);
+        glVertex2i(0, 0);
+        glTexCoord2i(1, 0);
+        glVertex2i(framebuffer_width, 0);
+        glTexCoord2i(1, 1);
+        glVertex2i(framebuffer_width, framebuffer_height);
+        glTexCoord2i(0, 1);
+        glVertex2i(0, framebuffer_height);
         glEnd();
-    }
-    else
-    {
+    } else {
         if (zoom)
-            glOrtho(-0.5, framebuffer_width-0.5, -0.5, framebuffer_height-0.5, -1, 1);
+            glOrtho(-0.5, framebuffer_width - 0.5, -0.5, framebuffer_height - 0.5, -1, 1);
         else
-            glOrtho(-0.5, screen_width-0.5, -0.5, screen_height-0.5, -1, 1);
+            glOrtho(-0.5, screen_width - 0.5, -0.5, screen_height - 0.5, -1, 1);
 
         DrawTrianglesOpenGL();
 
         glDisable(GL_TEXTURE_2D);
         glColor3f(1, 1, 0);
         glBegin(GL_POINTS);
-            glVertex2i(0, 0);
-            glVertex2i(framebuffer_width-1, framebuffer_height-1);
+        glVertex2i(0, 0);
+        glVertex2i(framebuffer_width - 1, framebuffer_height - 1);
         glEnd();
 
     }
@@ -278,10 +263,8 @@ DrawScene(void)
 }
 
 void
-KeyPressed(unsigned char key, int x, int y)
-{
-    switch (key)
-    {
+KeyPressed(unsigned char key, int x, int y) {
+    switch (key) {
         case '1':
         case '2':
         case '3':
@@ -326,8 +309,7 @@ KeyPressed(unsigned char key, int x, int y)
 }
 
 int
-main(int argc, char **argv)
-{
+main(int argc, char **argv) {
     glutInit(&argc, argv);
 
     glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH);
