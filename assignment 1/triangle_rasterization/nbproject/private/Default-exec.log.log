@@ -1,0 +1,15 @@
+called: gcc
+	/home/tyni/Documents/Graphics/assignment 1/triangle_rasterization
+	gcc
+	-c
+	-g
+	-O2
+	-std=c99
+	-Wall
+	-Wextra
+	-Werror-implicit-function-declaration
+	-Wshadow
+	-Wstrict-prototypes
+	-pedantic-errors
+	main.c
+

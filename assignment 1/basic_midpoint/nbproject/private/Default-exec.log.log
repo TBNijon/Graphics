@@ -1,0 +1,13 @@
+called: gcc
+	/home/tyni/Documents/Graphics/assignment 1/basic_midpoint
+	gcc
+	-W
+	-Wall
+	-Werror
+	-std=c99
+	-pedantic-errors
+	-c
+	-o
+	main.o
+	main.c
+
