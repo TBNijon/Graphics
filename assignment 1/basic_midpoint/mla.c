@@ -6,7 +6,7 @@
  *
  * Student name .... Max Grim & Tycho Nijon
  * Student email ... max.grim@student.uva.nl, tycho.nijon@student.uva.nl
- * Collegekaart .... 104xxxxx, 10385762
+ * Collegekaart .... 10431365, 10385762
  * Date ............ February 5th 2014
  * 
  * Comments ........ http://en.wikipedia.org/wiki/Bresenham%27s_line_algorithm 
