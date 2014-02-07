@@ -6,7 +6,7 @@
  * Student name .... Max Grim & Tycho Nijon
  * Student email ... max.grim@student.uva.nl, tycho.nijon@student.uva.nl
  * Collegekaart .... 10431365, 10385762
- * Date ............ February 5th 2014
+ * Date ............ February 7th 2014
  * 
  * Comments ........ The rasterization chapter in Shirley's book has been a 
  *  helpful source for this assignment.
