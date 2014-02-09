@@ -1,0 +1,156 @@
+called: gcc
+	/home/tyni/Documents/Graphics/assignment 2/transformations_and_gimbal_lock
+	gcc
+	-c
+	-O2
+	-std=c99
+	-Wall
+	-Wextra
+	-Werror-implicit-function-declaration
+	-Wshadow
+	-Wstrict-prototypes
+	-pedantic-errors
+	main.c
+
+called: gcc
+	/home/tyni/Documents/Graphics/assignment 2/transformations_and_gimbal_lock
+	gcc
+	-c
+	-O2
+	-std=c99
+	-Wall
+	-Wextra
+	-Werror-implicit-function-declaration
+	-Wshadow
+	-Wstrict-prototypes
+	-pedantic-errors
+	transformations.c
+
+called: gcc
+	/home/tyni/Documents/Graphics/assignment 2/transformations_and_gimbal_lock
+	gcc
+	-o
+	transformations
+	main.o
+	transformations.o
+	-lGL
+	-lglut
+	-lGLU
+	-lm
+
+called: /usr/bin/ld
+	/home/tyni/Documents/Graphics/assignment 2/transformations_and_gimbal_lock
+	/usr/bin/ld
+	--sysroot=/
+	--build-id
+	--no-add-needed
+	--as-needed
+	--eh-frame-hdr
+	-m
+	elf_i386
+	--hash-style=gnu
+	-dynamic-linker
+	/lib/ld-linux.so.2
+	-z
+	relro
+	-o
+	transformations
+	/usr/lib/gcc/i686-linux-gnu/4.6/../../../i386-linux-gnu/crt1.o
+	/usr/lib/gcc/i686-linux-gnu/4.6/../../../i386-linux-gnu/crti.o
+	/usr/lib/gcc/i686-linux-gnu/4.6/crtbegin.o
+	-L/usr/lib/gcc/i686-linux-gnu/4.6
+	-L/usr/lib/gcc/i686-linux-gnu/4.6/../../../i386-linux-gnu
+	-L/usr/lib/gcc/i686-linux-gnu/4.6/../../../../lib
+	-L/lib/i386-linux-gnu
+	-L/lib/../lib
+	-L/usr/lib/i386-linux-gnu
+	-L/usr/lib/../lib
+	-L/usr/lib/gcc/i686-linux-gnu/4.6/../../..
+	main.o
+	transformations.o
+	-lGL
+	-lglut
+	-lGLU
+	-lm
+	-lgcc
+	--as-needed
+	-lgcc_s
+	--no-as-needed
+	-lc
+	-lgcc
+	--as-needed
+	-lgcc_s
+	--no-as-needed
+	/usr/lib/gcc/i686-linux-gnu/4.6/crtend.o
+	/usr/lib/gcc/i686-linux-gnu/4.6/../../../i386-linux-gnu/crtn.o
+
+called: gcc
+	/home/tyni/Documents/Graphics/assignment 2/transformations_and_gimbal_lock
+	gcc
+	-c
+	-O2
+	-std=c99
+	-Wall
+	-Wextra
+	-Werror-implicit-function-declaration
+	-Wshadow
+	-Wstrict-prototypes
+	-pedantic-errors
+	gimbal.c
+
+called: gcc
+	/home/tyni/Documents/Graphics/assignment 2/transformations_and_gimbal_lock
+	gcc
+	-o
+	gimbal
+	gimbal.o
+	-lGL
+	-lglut
+	-lGLU
+	-lm
+
+called: /usr/bin/ld
+	/home/tyni/Documents/Graphics/assignment 2/transformations_and_gimbal_lock
+	/usr/bin/ld
+	--sysroot=/
+	--build-id
+	--no-add-needed
+	--as-needed
+	--eh-frame-hdr
+	-m
+	elf_i386
+	--hash-style=gnu
+	-dynamic-linker
+	/lib/ld-linux.so.2
+	-z
+	relro
+	-o
+	gimbal
+	/usr/lib/gcc/i686-linux-gnu/4.6/../../../i386-linux-gnu/crt1.o
+	/usr/lib/gcc/i686-linux-gnu/4.6/../../../i386-linux-gnu/crti.o
+	/usr/lib/gcc/i686-linux-gnu/4.6/crtbegin.o
+	-L/usr/lib/gcc/i686-linux-gnu/4.6
+	-L/usr/lib/gcc/i686-linux-gnu/4.6/../../../i386-linux-gnu
+	-L/usr/lib/gcc/i686-linux-gnu/4.6/../../../../lib
+	-L/lib/i386-linux-gnu
+	-L/lib/../lib
+	-L/usr/lib/i386-linux-gnu
+	-L/usr/lib/../lib
+	-L/usr/lib/gcc/i686-linux-gnu/4.6/../../..
+	gimbal.o
+	-lGL
+	-lglut
+	-lGLU
+	-lm
+	-lgcc
+	--as-needed
+	-lgcc_s
+	--no-as-needed
+	-lc
+	-lgcc
+	--as-needed
+	-lgcc_s
+	--no-as-needed
+	/usr/lib/gcc/i686-linux-gnu/4.6/crtend.o
+	/usr/lib/gcc/i686-linux-gnu/4.6/../../../i386-linux-gnu/crtn.o
+

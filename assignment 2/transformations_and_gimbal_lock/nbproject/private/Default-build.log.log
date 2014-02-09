@@ -1,0 +1,28 @@
+gcc -c -O2 -std=c99 -Wall -Wextra -Werror-implicit-function-declaration -Wshadow -Wstrict-prototypes -pedantic-errors main.c
+main.c: In function ‘keyPressed’:
+main.c:134:40: warning: unused parameter ‘x’ [-Wunused-parameter]
+main.c:134:47: warning: unused parameter ‘y’ [-Wunused-parameter]
+gcc -c -O2 -std=c99 -Wall -Wextra -Werror-implicit-function-declaration -Wshadow -Wstrict-prototypes -pedantic-errors transformations.c
+transformations.c: In function ‘myScalef’:
+transformations.c:26:23: warning: unused parameter ‘x’ [-Wunused-parameter]
+transformations.c:26:34: warning: unused parameter ‘y’ [-Wunused-parameter]
+transformations.c:26:45: warning: unused parameter ‘z’ [-Wunused-parameter]
+transformations.c: In function ‘myTranslatef’:
+transformations.c:40:27: warning: unused parameter ‘x’ [-Wunused-parameter]
+transformations.c:40:38: warning: unused parameter ‘y’ [-Wunused-parameter]
+transformations.c:40:49: warning: unused parameter ‘z’ [-Wunused-parameter]
+transformations.c: In function ‘myRotatef’:
+transformations.c:55:31: warning: unused variable ‘t’ [-Wunused-variable]
+transformations.c:55:25: warning: unused variable ‘w’ [-Wunused-variable]
+transformations.c:55:19: warning: unused variable ‘v’ [-Wunused-variable]
+transformations.c:55:13: warning: unused variable ‘u’ [-Wunused-variable]
+transformations.c:53:24: warning: unused parameter ‘angle’ [-Wunused-parameter]
+transformations.c:53:39: warning: unused parameter ‘x’ [-Wunused-parameter]
+transformations.c:53:50: warning: unused parameter ‘y’ [-Wunused-parameter]
+transformations.c:53:61: warning: unused parameter ‘z’ [-Wunused-parameter]
+gcc -o transformations main.o transformations.o -lGL -lglut -lGLU -lm
+gcc -c -O2 -std=c99 -Wall -Wextra -Werror-implicit-function-declaration -Wshadow -Wstrict-prototypes -pedantic-errors gimbal.c
+gimbal.c: In function ‘keyPressed’:
+gimbal.c:121:40: warning: unused parameter ‘x’ [-Wunused-parameter]
+gimbal.c:121:47: warning: unused parameter ‘y’ [-Wunused-parameter]
+gcc -o gimbal gimbal.o -lGL -lglut -lGLU -lm
