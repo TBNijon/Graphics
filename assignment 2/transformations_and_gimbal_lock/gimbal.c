@@ -26,14 +26,13 @@
 #define ROTATE_ONLY_X	1
 #define ROTATE_ONLY_Z	2
 
-int     window;
-float   x_rotation=0.0, z_rotation=0.0;
-int     prev_mouse_x, prev_mouse_y;
-int     do_mouse_transform=0;
-int     rotation_mode=ROTATE_X_AND_Z;
+int window;
+float x_rotation = 0.0, z_rotation = 0.0;
+int prev_mouse_x, prev_mouse_y;
+int do_mouse_transform = 0;
+int rotation_mode = ROTATE_X_AND_Z;
 
-void InitGL(void)
-{
+void InitGL(void) {
     glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
     glClearDepth(1.0);
     glDepthFunc(GL_LESS);
@@ -41,26 +40,24 @@ void InitGL(void)
     glShadeModel(GL_SMOOTH);
 }
 
-void ReSizeGLScene(int Width, int Height)
-{
-    float hfov=90.0, vfov;
+void ReSizeGLScene(int Width, int Height) {
+    float hfov = 90.0, vfov;
 
     if (Height == 0)
-        Height=1;
+        Height = 1;
 
     glViewport(0, 0, Width, Height);
 
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
 
-    vfov = hfov / (1.0*Width/Height);
+    vfov = hfov / (1.0 * Width / Height);
 
-    gluPerspective(vfov, (GLfloat)Width/(GLfloat)Height, 0.1f, 100.0f);
+    gluPerspective(vfov, (GLfloat) Width / (GLfloat) Height, 0.1f, 100.0f);
     glMatrixMode(GL_MODELVIEW);
 }
 
-void drawRotatedTeapot(float rotx, float roty, float rotz)
-{
+void drawRotatedTeapot(float rotx, float roty, float rotz) {
     glRotatef(rotx, 1.0, 0.0, 0.0);
     glRotatef(roty, 0.0, 1.0, 0.0);
     glRotatef(rotz, 0.0, 0.0, 1.0);
@@ -95,79 +92,82 @@ void drawRotatedTeapot(float rotx, float roty, float rotz)
     glEnd();
 }
 
-void drawTeapots(void)
-{
+void drawTeapots(void) {
     /* This function is called from DrawGLScene() below */
 
     glPushMatrix();
 
     drawRotatedTeapot(x_rotation, 0.0, z_rotation);
 
+    /* Place the next teapot 5 x-units away. */
+    myTranslatef(5, 0, 0);
+    drawRotatedTeapot(x_rotation, 45.0, z_rotation);
+
+    /* Rotate back to the original position first, otherwise we will translate
+     *  over a rotated axis, then rotate back to the first rotation. 
+     */
+    myRotatef(45.0, 0.0, 1.0, 0.0);
+    myTranslatef(0, 0, 5);
+    myRotatef(-45.0, 0.0, 1.0, 0.0);
+
+    drawRotatedTeapot(x_rotation, 45.0, z_rotation);
+
     glPopMatrix();
 }
 
-void DrawGLScene(void)
-{
+void DrawGLScene(void) {
     glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 
-    glLoadIdentity ();
-    gluLookAt (5.0, 6.0, 9.0,  5.0, 0.0, 0.0,   0.0, 1.0, 0.0);
+    glLoadIdentity();
+    gluLookAt(5.0, 6.0, 9.0, 5.0, 0.0, 0.0, 0.0, 1.0, 0.0);
 
     drawTeapots();
 
     glutSwapBuffers();
 }
 
-void keyPressed(unsigned char key, int x, int y)
-{
-    switch(key) {
-    case 27:
-      glutDestroyWindow(window);
-      exit(0);
-    case 'r':
-      x_rotation = 0.0f;
-      z_rotation = 0.0f;
-      rotation_mode = ROTATE_X_AND_Z;
-      printf("X and Z rotation reset to 0 degrees\n");
-      printf("Mouse rotates around both X and Z axes\n");
-      break;
-    case 'x':
-      rotation_mode = ROTATE_ONLY_X;
-      printf("Mouse rotates only around X axis\n");
-      break;
-    case 'z':
-      rotation_mode = ROTATE_ONLY_Z;
-      printf("Mouse rotates only around Z axis\n");
-      break;
+void keyPressed(unsigned char key, int x, int y) {
+    switch (key) {
+        case 27:
+            glutDestroyWindow(window);
+            exit(0);
+        case 'r':
+            x_rotation = 0.0f;
+            z_rotation = 0.0f;
+            rotation_mode = ROTATE_X_AND_Z;
+            printf("X and Z rotation reset to 0 degrees\n");
+            printf("Mouse rotates around both X and Z axes\n");
+            break;
+        case 'x':
+            rotation_mode = ROTATE_ONLY_X;
+            printf("Mouse rotates only around X axis\n");
+            break;
+        case 'z':
+            rotation_mode = ROTATE_ONLY_Z;
+            printf("Mouse rotates only around Z axis\n");
+            break;
     }
 
     DrawGLScene();
 }
 
-void mouseClick(int button, int state, int x, int y)
-{
-    if (button == GLUT_LEFT_BUTTON)
-    {
-        if (state == GLUT_DOWN)
-        {
+void mouseClick(int button, int state, int x, int y) {
+    if (button == GLUT_LEFT_BUTTON) {
+        if (state == GLUT_DOWN) {
             prev_mouse_x = x;
             prev_mouse_y = y;
             do_mouse_transform = 1;
-        }
-        else
-        {
+        } else {
             // mouse button released
             do_mouse_transform = 0;
         }
     }
 }
 
-void mouseMove(int x, int y)
-{
+void mouseMove(int x, int y) {
     int dx, dy;
 
-    if (do_mouse_transform)
-    {
+    if (do_mouse_transform) {
         dx = x - prev_mouse_x;
         dy = y - prev_mouse_y;
 
@@ -181,8 +181,7 @@ void mouseMove(int x, int y)
     }
 }
 
-int main(int argc, char **argv)
-{
+int main(int argc, char **argv) {
     glutInit(&argc, argv);
 
     glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_ALPHA | GLUT_DEPTH);
