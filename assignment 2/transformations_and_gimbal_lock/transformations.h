@@ -13,7 +13,7 @@ void myScalef(GLfloat x, GLfloat y, GLfloat z);
 void myTranslatef(GLfloat x, GLfloat y, GLfloat z);
 void myRotatef(GLfloat angle, GLfloat x, GLfloat y, GLfloat z);
 GLfloat getDotProduct(GLfloat *a, GLfloat *b, int a_size, int b_size);
-void normalizeMatrix(GLfloat *a, int a_size);
+void normalizeVector(GLfloat *a, int a_size);
 void set3DCrossProduct(GLfloat *a, GLfloat *b, GLfloat *z);
 
 

@@ -1,0 +1,3 @@
+gcc -I/usr/include/SDL -D_GNU_SOURCE=1 -D_REENTRANT -Wall -std=c99 -pedantic-errors -c -o main.o main.c
+gcc -I/usr/include/SDL -D_GNU_SOURCE=1 -D_REENTRANT -Wall -std=c99 -pedantic-errors -c -o lookat.o lookat.c
+gcc -o main main.o lookat.o -I/usr/include/SDL -D_GNU_SOURCE=1 -D_REENTRANT -Wall -std=c99 -pedantic-errors -L/usr/lib/i386-linux-gnu -lSDL -L/usr/X11R6/lib -lm -lGL -lGLU -lglut

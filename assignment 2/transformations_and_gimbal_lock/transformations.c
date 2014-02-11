@@ -51,24 +51,26 @@ void myRotatef(GLfloat angle, GLfloat x, GLfloat y, GLfloat z) {
     int w_size, u_size;
 
     /* 1: Create the orthonormal basis. */
+    
+    /* Set the w vector and normalize it. */
     w[0] = x;
     w[1] = y;
     w[2] = z;
 
     w_size = sizeof (w) / sizeof (GLfloat);
-    normalizeMatrix(w, w_size);
+    normalizeVector(w, w_size);
 
+    /* Set the t vector. */
     t[0] = w[0];
     t[1] = w[1];
     t[2] = 1;
 
-    /* Compute the cross product of t and w (u). */
+    /* Set u vector orthogonal to t and w and normalize it. */
     set3DCrossProduct(t, w, u);
-
     u_size = sizeof (u) / sizeof (GLfloat);
-    normalizeMatrix(u, u_size);
+    normalizeVector(u, u_size);
 
-    /* Compute the cross product of w and u (v). */
+    /* Set the v vector orthogonal to w and u. */
     set3DCrossProduct(w, u, v);
 
     /* 2: Specify the three matrices used for the rotation. */
@@ -76,6 +78,7 @@ void myRotatef(GLfloat angle, GLfloat x, GLfloat y, GLfloat z) {
     /* Convert the angle variable to radians. */
     angle = (angle * M_PI) / 180.0;
 
+    /* Build the matrices used for the rotation. */
     GLfloat A[16] = {
         u[0], u[1], u[2], 0.0,
         v[0], v[1], v[2], 0.0,
@@ -121,7 +124,7 @@ GLfloat getDotProduct(GLfloat *a, GLfloat *b, int a_size, int b_size) {
 }
 
 /* This function normalizes an input matrix. */
-void normalizeMatrix(GLfloat *a, int a_size) {
+void normalizeVector(GLfloat *a, int a_size) {
     float divide_value = sqrt(getDotProduct(a, a, a_size, a_size));
 
     for (int i = 0; i < a_size; i++) {

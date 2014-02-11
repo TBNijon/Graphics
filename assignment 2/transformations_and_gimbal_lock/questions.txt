@@ -1,0 +1,2 @@
+Q1) Eerst x, dan y en als laatste z.
+Q2) De meest rechtse theepot draait alleen bij rotaties om de z-as en rotaties om de x-as allebei om de z-as: de x-rotatie is niet meer mogelijk vanwege een gimbal-lock.

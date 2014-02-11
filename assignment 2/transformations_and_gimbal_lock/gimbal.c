@@ -4,14 +4,12 @@
  * Description ..... Draw teapots that can be interactively rotated with the mouse
  * Created by ...... Paul Melis
  *
- * Student name ....
- * Student email ...
- * Collegekaart ....
- * Date ............
- * Comments ........
+ * Student name .... Max Grim & Tycho Nijon
+ * Student email ... max.grim@student.uva.nl, tycho.nijon@student.uva.nl
+ * Collegekaart .... 10431365, 10385762
+ * Date ............ February 11th 2014
+ * Comments ........ 
  *
- *
- * (always fill in these fields before submitting!!)
  */
 
 #include <stdio.h>
@@ -95,24 +93,23 @@ void drawRotatedTeapot(float rotx, float roty, float rotz) {
 void drawTeapots(void) {
     /* This function is called from DrawGLScene() below */
 
+    /* Draw the first teapot. */
     glPushMatrix();
-
     drawRotatedTeapot(x_rotation, 0.0, z_rotation);
+    glPopMatrix();
 
     /* Place the next teapot 5 x-units away. */
     myTranslatef(5, 0, 0);
+    glPushMatrix();
     drawRotatedTeapot(x_rotation, 45.0, z_rotation);
-
-    /* Rotate back to the original position first, otherwise we will translate
-     *  over a rotated axis, then rotate back to the first rotation. 
-     */
-    myRotatef(45.0, 0.0, 1.0, 0.0);
-    myTranslatef(0, 0, 5);
-    myRotatef(-45.0, 0.0, 1.0, 0.0);
-
-    drawRotatedTeapot(x_rotation, 45.0, z_rotation);
-
     glPopMatrix();
+
+    /* Place the last teapot 5 additional x-units away. */
+    glPushMatrix();
+    myTranslatef(5, 0, 0);
+    drawRotatedTeapot(x_rotation, 90.0, z_rotation);
+    glPopMatrix();
+
 }
 
 void DrawGLScene(void) {
