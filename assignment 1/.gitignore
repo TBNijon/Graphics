@@ -1,1 +1,2 @@
-*.o
+basic_midpoint/main
+triangle_rasterization/trirast
