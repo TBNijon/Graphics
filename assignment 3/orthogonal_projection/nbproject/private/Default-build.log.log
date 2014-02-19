@@ -1,0 +1,3 @@
+gcc -I/usr/include/SDL -D_GNU_SOURCE=1 -D_REENTRANT -Wall -std=c99 -pedantic-errors -c -o main.o main.c
+gcc -I/usr/include/SDL -D_GNU_SOURCE=1 -D_REENTRANT -Wall -std=c99 -pedantic-errors -c -o ortho.o ortho.c
+gcc -o main main.o ortho.o -I/usr/include/SDL -D_GNU_SOURCE=1 -D_REENTRANT -Wall -std=c99 -pedantic-errors -L/usr/lib/i386-linux-gnu -lSDL -lm -lGL -lGLU -lglut
