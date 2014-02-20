@@ -5,19 +5,16 @@
  * Date ............ 01.09.2006
  * Created by ...... Jurgen Sturm 
  *
- * Student name ....
- * Student email ... 
- * Collegekaart ....
- * Date ............
- * Comments ........
- *
- *
- * (always fill in these fields before submitting!!)
+ * Student name .... Max Grim & Tycho Nijon
+ * Student email ... max.grim@student.uva.nl & tychonijon@gmail.com
+ * Collegekaart .... 10431365 & 10385762
+ * Date ............ 19-02-2014
+ * Comments ........ None
  */
+
 #include <GL/glut.h>   
 #include <GL/gl.h>
 #include <GL/glu.h>
-
 
 #define sqr(x) ((x)*(x))
 
@@ -29,13 +26,13 @@
 void myOrtho(GLdouble l, GLdouble r,
         GLdouble b, GLdouble t,
         GLdouble n, GLdouble f) {
-    
+
     /* Added these variables to make the matrix readable. */
     GLdouble right_left, top_bottom, near_far;
     right_left = (r + l) / (r - l);
     top_bottom = (t + b) / (t - b);
     near_far = (n + f) / (n - f);
-    
+
     /* Matrix 7.3 on page 145 of the Shirley book used as a guideline. */
     GLfloat M[16] = {
         (2 / (r - l)), 0.0, 0.0, 0.0,
@@ -45,5 +42,4 @@ void myOrtho(GLdouble l, GLdouble r,
     };
 
     glMultMatrixf(M);
-
 }
