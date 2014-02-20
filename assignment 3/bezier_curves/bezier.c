@@ -9,6 +9,9 @@
  * Collegekaart .... 10431365 & 10385762
  * Date ............ 20-02-2013
  * Comments ........ None
+ *
+ * Sources:
+ *  http://devmag.org.za/2011/04/05/bzier-curves-a-tutorial/
  */
 
 #include <math.h>
@@ -24,15 +27,21 @@
  */
 
 void evaluate_bezier_curve(float *x, float *y, control_point p[], int num_points, float u) {
-    if(num_points == 2) {
-        *x = (1 - u) * p[0].x + u * p[1].x;
-        *y = (1 - u) * p[0].y + u * p[1].y;
-    } else if(num_points == 3) {
-        *x = pow(1 - u, 2) * p[0].x + ((2 * (1 - u)) * u * p[1].x) + (pow(u, 2) * p[2].x);
-        *y = pow(1 - u, 2) * p[0].y + ((2 * (1 - u)) * u * p[1].y) + (pow(u, 2) * p[2].y);
-    } else if(num_points == 4) {
-        *x = pow(1 - u, 3) * p[0].x + 3 * (pow(1 - u, 2) * u * p[1].x) + 3 * ((1 - u) * pow(u, 2) * p[2].x) + pow(u, 3) * p[3].x;
-        *y = pow(1 - u, 3) * p[0].y + 3 * (pow(1 - u, 2) * u * p[1].y) + 3 * ((1 - u) * pow(u, 2) * p[2].y) + pow(u, 3) * p[3].y;
+    int a;
+    int degree = num_points - 1;
+
+    *x = 0;
+    *y = 0;
+
+    for(int i = 0; i <= degree; i++) {
+        if(i > 0 && i < degree) {
+            a = degree;
+        } else {
+            a = 1;
+        }
+
+        *x += pow(1 - u, degree - i) * p[i].x * pow(u, i) * a;
+        *y += pow(1 - u, degree - i) * p[i].y * pow(u, i) * a;
     }
 }
 
