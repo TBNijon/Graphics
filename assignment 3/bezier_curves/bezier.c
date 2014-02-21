@@ -14,9 +14,14 @@
  *  http://devmag.org.za/2011/04/05/bzier-curves-a-tutorial/
  */
 
+#include <stdlib.h>
 #include <math.h>
 #include "bezier.h"
 #include <stdio.h>
+
+#ifndef M_PI
+#define M_PI           3.14159265358979323846
+#endif
 
 /* Given a Bezier curve defined by the 'num_points' control points
  * in 'p' compute the position of the point on the curve for parameter
@@ -83,6 +88,101 @@ void draw_bezier_curve(int num_segments, control_point p[], int num_points) {
     }
 }
 
+void bezierCoeffs(float *z, float p0, float p1, float p2, float p3) {
+    z[0] = -p0 + 3*p1 + -3*p2 + p3; 
+    z[1] = 3 * p0 - 6 * p1 + 3 * p2;
+    z[2] = -3 * p0 + 3 * p1;
+    z[3] = p0;
+}
+
+int sgn(float x) {
+    return (x < 0.0) ? -1 : 1;
+}
+
+void cubicRoots(float *r, float *p, float *t) {
+    float a = p[0];
+    float b = p[1];
+    float c = p[2];
+    float d = p[3];
+
+    float A = b / a;
+    float B = c / a;
+    float C = d / a;
+
+    float Q, R, D, Im;
+    int S, T;
+
+    Q = (3 * B - pow(A, 2)) / 9;
+    R = (9 * A * B - 27 * C - 2 * pow(A, 3)) / 54;
+    D = pow(Q, 3) + pow(R, 2);
+
+    if(D >= 0) {
+        S = sgn(R + sqrt(D)) * pow(abs(R + sqrt(D)), (1/3));
+        T = sgn(R - sqrt(D)) * pow(abs(R - sqrt(D)), (1/3));
+
+        t[0] = -A / 3 + (S + T);
+        t[1] = -A / 3 - (S + T) / 2;
+        t[2] = -A / 3 - (S + T) / 2;
+
+        Im = abs(sqrt(3) * (S - T) / 2);
+
+        if(Im != 0) {
+            t[1] = -1;
+            t[2] = -1;
+        }
+    } else {
+        float th = acos(R/sqrt(-pow(Q, 3)));
+
+        t[0] = 2 * sqrt(-Q) * cos(th / 3) - A / 3;
+        t[1] = 2 * sqrt(-Q) * cos((th + 2 * M_PI) / 3) - A/3;
+        t[2] = 2 * sqrt(-Q) * cos((th + 4 * M_PI) / 3) - A/3;
+        Im = 0.0;
+    }
+
+    for(int i = 0; i < 3; i++) {
+        if(t[i] < 0 || t[i] > 1.0) t[i] = -1;
+    }
+}
+
+void computeIntersections(float px[], float py[], float lx[], float ly[]) {
+    float a = ly[1]-ly[0];      //A=y2-y1
+    float b = lx[0]-lx[1];      //B=x1-x2
+    float c = lx[0]*(ly[0]-ly[1]) + ly[0]*(lx[1]-lx[0]);  //C=x1*(y1-y2)+y1*(x2-x1)
+
+    float bx[4], by[4];
+    bezierCoeffs(bx, px[0],px[1],px[2],px[3]);
+    bezierCoeffs(by, py[0],py[1],py[2],py[3]);
+
+    float p[4];
+    p[0] = a * bx[0] + b * by[0];
+    p[1] = a * bx[1] + b * by[1];     /*t^2*/
+    p[2] = a * bx[2] + b * by[2];     /*t*/
+    p[3] = a * bx[3] + b * by[3] + c; /*1*/
+
+    float r[3], t[3];
+    cubicRoots(r, p, t);
+
+    for(int i = 0; i < 3; i++) {
+        float x[2], s;
+
+        x[0] = bx[0] * r[i] * r[i] * r[i] + bx[1] * r[i] * r[i] + bx[2] * r[i] + bx[3];
+        x[1] = by[0] * r[i] * r[i] * r[i] + by[1] * r[i] * r[i] + by[2] * r[i] + by[3];
+
+        if((lx[1] - lx[0]) != 0) {
+            s = (x[0] - lx[0]) / (lx[1] - lx[0]);
+        } else {
+            s = (x[1] - ly[0]) / (ly[1] - ly[0]);
+        }
+
+        if(r[i] < 0 || r[i] > 1.0 || s < 0 || s > 1.0) {
+            x[0] = -100;
+            x[1] = -100;
+        }
+
+        printf("%f, %f\n", x[0], x[1]);
+    }
+}
+
 /* Find the intersection of a cubic Bezier curve with the line X=x.
    Return 1 if an intersection was found and place the corresponding y
    value in *y.
@@ -90,6 +190,28 @@ void draw_bezier_curve(int num_segments, control_point p[], int num_points) {
    */
 
 int intersect_cubic_bezier_curve(float *y, control_point p[], float x) {
-    return 0;
+    printf("%f\n", x);
+    float px[4];
+    float py[4];
+    float lx[2];
+    float ly[2];
+
+    px[0] = p[0].x;
+    px[1] = p[1].x;
+    px[2] = p[2].x;
+    px[3] = p[3].x;
+
+    printf("%f\n", px[0]);
+    py[0] = p[0].y;
+    py[1] = p[1].y;
+    py[2] = p[2].y;
+    py[3] = p[3].y;
+
+    lx[0] = x;
+    lx[1] = x;
+    ly[0] = -50;
+    ly[1] = 50;
+
+    computeIntersections(px, py, lx, ly);
 }
 
