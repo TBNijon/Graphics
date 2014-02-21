@@ -53,16 +53,6 @@ void evaluate_bezier_curve(float *x, float *y, control_point p[], int num_points
 /* Draw a Bezier curve defined by the control points in p[], which
  * will contain 'num_points' points.
  *
- * Draw the line segments you compute directly on the screen
- * as a single GL_LINE_STRIP. This is as simple as using
- *
- *      glBegin(GL_LINE_STRIP);
- *      glVertex2f(..., ...);
- *      ...
- *      glEnd();
- *
- * DO NOT SET ANY COLOR!
- *
  * The 'num_segments' parameter determines the "discretization" of the Bezier
  * curve and is the number of straight line segments that should be used
  * to approximate the curve.
@@ -190,28 +180,23 @@ void computeIntersections(float px[], float py[], float lx[], float ly[]) {
    */
 
 int intersect_cubic_bezier_curve(float *y, control_point p[], float x) {
-    printf("%f\n", x);
-    float px[4];
-    float py[4];
-    float lx[2];
-    float ly[2];
+    float temp = 0.5;
+    float k = 0.5;
+    float tmpX = 0.0, tmpY = 0.0;
+    while (1) {
+        if (k < 0.0001)
+            return 0;
 
-    px[0] = p[0].x;
-    px[1] = p[1].x;
-    px[2] = p[2].x;
-    px[3] = p[3].x;
-
-    printf("%f\n", px[0]);
-    py[0] = p[0].y;
-    py[1] = p[1].y;
-    py[2] = p[2].y;
-    py[3] = p[3].y;
-
-    lx[0] = x;
-    lx[1] = x;
-    ly[0] = -50;
-    ly[1] = 50;
-
-    computeIntersections(px, py, lx, ly);
+        evaluate_bezier_curve(&tmpX, &tmpY, p, 4, temp);
+        if (tmpX >= (x - 1E-3) && tmpX <= (x + 1E-3)) {
+            *y = tmpY;
+            return 1;
+        }
+        k *= 0.5;
+        if (tmpX < x)
+            temp += k;
+        else
+            temp -= k;
+    }
+    return 0;
 }
-
